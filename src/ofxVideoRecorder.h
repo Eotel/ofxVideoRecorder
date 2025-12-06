@@ -1,7 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
-#include "Poco/Condition.h"
+#include <condition_variable>
+#include <mutex>
 #include <set>
 
 //--------------------------------------------------------------
@@ -71,7 +72,7 @@ public:
     bool bNotifyError;
 private:
     ofMutex conditionMutex;
-    Poco::Condition condition;
+    std::condition_variable_any condition;
 //    ofFile * writer;
     string filePath;
     int fd;
@@ -95,7 +96,7 @@ public:
     bool bNotifyError;
 private:
     ofMutex conditionMutex;
-    Poco::Condition condition;
+    std::condition_variable_any condition;
 //    ofFile * writer;
     string filePath;
     int fd;
@@ -201,7 +202,7 @@ private:
     int videoPipeFd, audioPipeFd;
     int pipeNumber;
 
-    static set<int> openPipes;
+    static std::set<int> openPipes;
     static int requestPipeNumber();
     static void retirePipeNumber(int num);
 

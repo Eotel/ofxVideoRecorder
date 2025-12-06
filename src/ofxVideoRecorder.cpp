@@ -124,7 +124,8 @@ void ofxVideoDataWriterThread::threadedFunction(){
             delete frame;
         }
         else{
-            condition.wait(conditionMutex);
+            std::unique_lock<ofMutex> lock(conditionMutex);
+            condition.wait(lock);
         }
     }
 
@@ -134,7 +135,7 @@ void ofxVideoDataWriterThread::threadedFunction(){
 
 //--------------------------------------------------------------
 void ofxVideoDataWriterThread::signal(){
-    condition.signal();
+    condition.notify_all();
 }
 
 //--------------------------------------------------------------
@@ -200,7 +201,8 @@ void ofxAudioDataWriterThread::threadedFunction(){
             delete frame;
         }
         else{
-            condition.wait(conditionMutex);
+            std::unique_lock<ofMutex> lock(conditionMutex);
+            condition.wait(lock);
         }
     }
 
@@ -210,7 +212,7 @@ void ofxAudioDataWriterThread::threadedFunction(){
 
 //--------------------------------------------------------------
 void ofxAudioDataWriterThread::signal(){
-    condition.signal();
+    condition.notify_all();
 }
 
 //--------------------------------------------------------------
@@ -591,7 +593,7 @@ float ofxVideoRecorder::systemClock(){
 }
 
 //--------------------------------------------------------------
-set<int> ofxVideoRecorder::openPipes;
+std::set<int> ofxVideoRecorder::openPipes;
 
 //--------------------------------------------------------------
 int ofxVideoRecorder::requestPipeNumber(){
