@@ -5,6 +5,10 @@
 #include <mutex>
 #include <set>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 template <typename T>
@@ -75,7 +79,11 @@ private:
     std::condition_variable_any condition;
 //    ofFile * writer;
     string filePath;
+#ifdef _WIN32
+    HANDLE hPipe;
+#else
     int fd;
+#endif
     lockFreeQueue<ofPixels *> * queue;
     bool bIsWriting;
     bool bClose;
@@ -99,7 +107,11 @@ private:
     std::condition_variable_any condition;
 //    ofFile * writer;
     string filePath;
+#ifdef _WIN32
+    HANDLE hPipe;
+#else
     int fd;
+#endif
     lockFreeQueue<audioFrameShort *> * queue;
     bool bIsWriting;
     bool bClose;
